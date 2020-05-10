@@ -87,13 +87,14 @@ class Caltech(VisionDataset):
 
     def get_validation(self, stratify=False, validation_size=.5):
 
+        # Get indexes and corresponding images and split them
+        indexes = list(self.images.keys())
+        labels = list(map(lambda image: image[0], self.images.values()))
+
         valid_split = False
         while not valid_split:
 
-            # Get indexes and corresponding images and split them
-            indexes = list(self.images.keys())
-            labels = list(map(lambda image: image[0], self.images.values()))
-
+            # Split the data
             X_train, X_test, y_train, y_test = train_test_split(indexes, labels, test_size=validation_size, stratify=(y if stratify is True else None)))
 
             # Check the length of unique classes in each split
