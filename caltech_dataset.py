@@ -94,10 +94,7 @@ class Caltech(VisionDataset):
             indexes = list(self.images.keys())
             labels = list(map(lambda image: image[0], self.images.values()))
 
-            if stratify:
-                X_train, X_test, y_train, y_test = train_test_split(indexes, labels, test_size=validation_size, stratify=y)
-            else:
-                X_train, X_test, y_train, y_test = train_test_split(indexes, labels, test_size=validation_size)
+            X_train, X_test, y_train, y_test = train_test_split(indexes, labels, test_size=validation_size, stratify=(y if stratify is True else None)))
 
             # Check the length of unique classes in each split
             train_all_classes = len(set(y_train))
