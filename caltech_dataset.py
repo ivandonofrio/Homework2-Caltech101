@@ -49,9 +49,9 @@ class Caltech(VisionDataset):
                 label = line.split('/')[0]
                 if label not in self.labels:
 
-                    index = len(self.labels)
-                    self.labels[label] = index
-                    self.indexes[index] = label
+                    encoding = len(self.labels)
+                    self.labels[label] = encoding
+                    self.indexes[encoding] = label
 
                 # Store new image in proper dectionary
                 self.images[index] = (self.labels[label], pil_loader(f'./Caltech101/101_ObjectCategories/{line}'))
@@ -82,15 +82,29 @@ class Caltech(VisionDataset):
         The __len__ method returns the length of the dataset
         It is mandatory, as this is used by several other components
         '''
-        length = len(self.split) # Provide a way to get the length (number of elements) of the dataset
+        length = len(self.images) # Provide a way to get the length (number of elements) of the dataset
         return length
 
-    def get_validation(self, validation_size=.5):
+    def get_validation(self, stratify=False, validation_size=.5):
 
-        # Get indexes and corresponding images and split them
-        indexes = list(self.images.keys())
-        labels = list(map(lambda image: image[0], self.images.values()))
-        X_train, X_test, y_train, y_test = train_test_split(indexes, labels, test_size=validation_size, stratify=labels)
+        valid_split = False
+        while not valid_split:
+
+            # Get indexes and corresponding images and split them
+            indexes = list(self.images.keys())
+            labels = list(map(lambda image: image[0], self.images.values()))
+
+            if stratify:
+                X_train, X_test, y_train, y_test = train_test_split(indexes, labels, test_size=validation_size, stratify=y)
+            else:
+                X_train, X_test, y_train, y_test = train_test_split(indexes, labels, test_size=validation_size)
+
+            # Check the length of unique classes in each split
+            train_all_classes = len(set(y_train))
+            test_all_classes = len(set(y_test))
+
+            # Evaluate exit condition
+            valid_split = (train_all_classes == test_all_classes and train_all_classes == 101)
 
         # Get split indexes
         return X_train, X_test
