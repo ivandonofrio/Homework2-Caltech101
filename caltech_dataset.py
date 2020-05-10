@@ -33,7 +33,7 @@ class Caltech(VisionDataset):
         '''
 
         # Importing each image from provided files
-        with open(f'./{self.split}.txt', 'r') as split_file:
+        with open(f'./Caltech101/{self.split}.txt', 'r') as split_file:
 
             # Get all split lines
             lines = split_file.read().split('\n')
@@ -54,7 +54,7 @@ class Caltech(VisionDataset):
                     self.indexes[index] = label
 
                 # Store new image in proper dectionary
-                images[index] = (self.labels[label], pil_loader(f'./{line}'))
+                images[index] = (self.labels[label], pil_loader(f'./Caltech101/{line}'))
 
 
     def __getitem__(self, index):
