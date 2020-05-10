@@ -49,7 +49,7 @@ class Caltech(VisionDataset):
                 label = line.split('/')[0]
                 if label not in self.labels:
 
-                    index = len(labels)
+                    index = len(self.labels)
                     self.labels[label] = index
                     self.indexes[index] = label
 
