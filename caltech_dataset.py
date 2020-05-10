@@ -43,7 +43,7 @@ class Caltech(VisionDataset):
             self.images = {}
             self.labels = {}
             self.indexes = {}
-            for index, line in enumerate([line for line in lines if 'BACKGROUND' not in line]):
+            for index, line in enumerate([line for line in lines if line and 'BACKGROUND' not in line]):
 
                 # Convert label to integer
                 label = line.split('/')[0]
@@ -54,7 +54,7 @@ class Caltech(VisionDataset):
                     self.indexes[index] = label
 
                 # Store new image in proper dectionary
-                images[index] = (self.labels[label], pil_loader(f'./Caltech101/101_ObjectCategories/{line}'))
+                self.images[index] = (self.labels[label], pil_loader(f'./Caltech101/101_ObjectCategories/{line}'))
 
 
     def __getitem__(self, index):
@@ -87,19 +87,10 @@ class Caltech(VisionDataset):
 
     def get_validation(self, validation_size=.5):
 
-        valid_split = False
-        while not valid_split:
-
-            # Get indexes and corresponding images and split them
-            indexes, images = self.images.keys(), map(lambda image: image[0], self.images.values())
-            X_train, X_test, y_train, y_test = train_test_split(indexes, images, test_size=validation_size)
-
-            # Check the length of unique classes in each split
-            train_all_classes = len(set(y_train))
-            test_all_classes = len(set(y_test))
-
-            # Evaluate exit condition
-            valid_split = (train_all_classes == test_all_classes and train_all_classes == 101)
+        # Get indexes and corresponding images and split them
+        indexes = list(self.images.keys())
+        labels = list(map(lambda image: image[0], self.images.values()))
+        X_train, X_test, y_train, y_test = train_test_split(indexes, labels, test_size=validation_size, stratify=labels)
 
         # Get split indexes
         return X_train, X_test
