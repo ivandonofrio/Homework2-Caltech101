@@ -95,7 +95,7 @@ class Caltech(VisionDataset):
         while not valid_split:
 
             # Split the data
-            X_train, X_test, y_train, y_test = train_test_split(indexes, labels, test_size=validation_size, stratify=(y if stratify is True else None))
+            X_train, X_test, y_train, y_test = train_test_split(indexes, labels, test_size=validation_size, stratify=(labels if stratify is True else None))
 
             # Check the length of unique classes in each split
             train_all_classes = len(set(y_train))
