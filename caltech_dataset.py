@@ -89,7 +89,7 @@ class Caltech(VisionDataset):
 
         # Get indexes and corresponding images and split them
         indexes = list(self.images.keys())
-        labels = list(map(lambda image: image[0], self.images.values()))
+        labels = list(map(lambda image: image[1], self.images.values()))
 
         valid_split = False
         while not valid_split:
