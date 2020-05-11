@@ -54,7 +54,7 @@ class Caltech(VisionDataset):
                     self.indexes[encoding] = label
 
                 # Store new image in proper dectionary
-                self.images[index] = (self.labels[label], pil_loader(f'./Caltech101/101_ObjectCategories/{line}'))
+                self.images[index] = (pil_loader(f'./Caltech101/101_ObjectCategories/{line}'), self.labels[label])
 
 
     def __getitem__(self, index):
